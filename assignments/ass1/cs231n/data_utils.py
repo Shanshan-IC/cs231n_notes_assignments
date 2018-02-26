@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+
 import pickle
 import numpy as np
 import os

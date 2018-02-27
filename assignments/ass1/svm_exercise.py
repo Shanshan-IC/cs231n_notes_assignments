@@ -84,10 +84,47 @@ print('Validation data shape: ', X_val.shape)
 print('Test data shape: ', X_test.shape)
 print('dev data shape: ', X_dev.shape)
 
+# step 1: 计算图像mean
+mean_image = np.mean(X_train, axis=0)
+print(mean_image[:10]) # print a few of the elements
+plt.figure(figsize=(4,4))
+plt.imshow(mean_image.reshape((32,32,3)).astype('uint8')) # visualize the mean image
+plt.show()
+# step 2: 训练和测试数据减去mean
+X_train -= mean_image
+X_val -= mean_image
+X_test -= mean_image
+X_dev -= mean_image
+# step 3: 增加bias一行至矩阵中
+X_train = np.hstack([X_train, np.ones((X_train.shape[0], 1))]) # vstack是行拼接，hstack是列拼接
+X_val = np.hstack([X_val, np.ones((X_val.shape[0], 1))])
+X_test = np.hstack([X_test, np.ones((X_test.shape[0], 1))])
+X_dev = np.hstack([X_dev, np.ones((X_dev.shape[0], 1))])
+print(X_train.shape, X_val.shape, X_test.shape, X_dev.shape)
 
 
+# SVM 模型
+from cs231n.classifiers.linear_svm import svm_loss_naive
+import time
+# generate a random SVM weight matrix of small numbers
+# compute_loss_naive 使用的是循环计算
+W = np.random.randn(3073, 10) * 0.0001
+loss, grad = svm_loss_naive(W, X_dev, y_dev, 0.00001)
+print('loss: %f' % (loss, ))
 
+loss, grad = svm_loss_naive(W, X_dev, y_dev, 0.0)
+# Numerically compute the gradient along several randomly chosen dimensions, and
+# compare them with your analytically computed gradient. The numbers should match
+# almost exactly along all dimensions.
+from cs231n.gradient_check import grad_check_sparse
+f = lambda w: svm_loss_naive(w, X_dev, y_dev, 0.0)[0]
+grad_numerical = grad_check_sparse(f, W, grad)
 
+# do the gradient check once again with regularization turned on
+# 但是在0 附近的差别可能比较大
+loss, grad = svm_loss_naive(W, X_dev, y_dev, 1e2)
+f = lambda w: svm_loss_naive(w, X_dev, y_dev, 1e2)[0]
+grad_numerical = grad_check_sparse(f, W, grad)
 
 
 

@@ -127,6 +127,18 @@ f = lambda w: svm_loss_naive(w, X_dev, y_dev, 1e2)[0]
 grad_numerical = grad_check_sparse(f, W, grad)
 
 
+# 第二种方法是将其向量化，比较两种方法的时间和结果
+tic = time.time()
+loss_naive, grad_naive = svm_loss_naive(W, X_dev, y_dev, 0.00001)
+toc = time.time()
+print('Naive loss: %e computed in %fs' % (loss_naive, toc - tic))
+from cs231n.classifiers.linear_svm import svm_loss_vectorized
+tic = time.time()
+loss_vectorized, _ = svm_loss_vectorized(W, X_dev, y_dev, 0.00001)
+toc = time.time()
+print('Vectorized loss: %e computed in %fs' % (loss_vectorized, toc - tic))
+# The losses should match but your vectorized implementation should be much faster.
+print('difference: %f' % (loss_naive - loss_vectorized))
 
 
 

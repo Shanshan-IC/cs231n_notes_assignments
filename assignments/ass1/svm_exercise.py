@@ -49,7 +49,16 @@ mask = range(num_training, num_training + num_validation)
 X_val = X_train[mask]
 y_val = y_train[mask]
 
-# Our training set will be the first num_train points from the original
+# Our training set will
+X_test = X_test[mask]
+y_test = y_test[mask]
+
+print('Train data shape: ', X_train.shape)
+print('Train labels shape: ', y_train.shape)
+print('Validation data shape: ', X_val.shape)
+print('Validation labels shape: ', y_val.shape)
+print('Test data shape: ', X_test.shape)
+print('Test labels shape: ', y_test.shape)be the first num_train points from the original
 # training set.
 mask = range(num_training)
 X_train = X_train[mask]
@@ -60,15 +69,6 @@ X_dev = X_train[mask]
 y_dev = y_train[mask]
 
 mask = range(num_test)
-X_test = X_test[mask]
-y_test = y_test[mask]
-
-print('Train data shape: ', X_train.shape)
-print('Train labels shape: ', y_train.shape)
-print('Validation data shape: ', X_val.shape)
-print('Validation labels shape: ', y_val.shape)
-print('Test data shape: ', X_test.shape)
-print('Test labels shape: ', y_test.shape)
 
 
 # 图像数据预处理，将图像拉成一个向量
@@ -139,6 +139,5 @@ toc = time.time()
 print('Vectorized loss: %e computed in %fs' % (loss_vectorized, toc - tic))
 # The losses should match but your vectorized implementation should be much faster.
 print('difference: %f' % (loss_naive - loss_vectorized))
-
 
 
